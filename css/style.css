@@ -79,9 +79,11 @@
      transform-style: preserve-3d;
  }
  
+ /* TODO: UNCOMMENT! COMMENTING TO PREVENT hover FROM HAPPENING
  .card.flip, .card:hover{
      transform: rotateY(180deg);
  }
+ */
  
  .front, .back{
      height: 100%; 
