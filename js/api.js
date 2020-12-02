@@ -45,8 +45,11 @@ function fetchImages() {
             arrayOfCards.push(new Card(arrayOfUrls[i]))
         }
 
+        /* Shuffling the Cards */
+        let shuffledArrayOfCards = arrayOfCards.sort(() => Math.random() -0.5); 
+    
         /* Putting the cards on the DOM */ 
-        createCards(arrayOfCards); 
+        createCards(shuffledArrayOfCards); 
 
     })
     .catch((err) => {
