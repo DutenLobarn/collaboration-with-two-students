@@ -1,3 +1,6 @@
+// ELEMENTS
+const gameboard = document.querySelector('.gameboard');
+
 // CONSTRUCTOR
 export function Card(_imgSrc) {
     this.imgSrc = _imgSrc;

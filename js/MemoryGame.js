@@ -2,7 +2,8 @@
 'use strict'
 
 // TODO: Add imports from API and MemoryCard!
-
+import {Card} from './cardsconstructor.js'
+import {fetchImages} from './api.js'
 
 
 // ***** ELEMENTS *****
@@ -26,30 +27,25 @@ pressToPlay.addEventListener('click', function (event) {
    console.log('Start the game!'); 
 });
 
-// TODO: Populate the gameboard (using placehodler for now), replace with api-module + memorycard-module
-// Placeholder - 24 = maxnumber of cards
+// Populating the gameboard with Card-objects. One Card-object represents a memory card.
+// Initiating Card-objects and pushing them to an array.
+const cardArray = [];
 for (let i = 0; i < 24; i++) {
-    let card = document.createElement('div');
-    card.classList.add('card');
-    
-    // PLACEHOLDER STYLING - Represents card turned downwards.
-    card.style.background = 'lightblue';
-    card.style.border = '5px dotted white';
-    card.style.borderRadius = '5px';
+    let newCard = new Card (null);
 
-    // Appending card as child to gameboard.
-    gameboard.append(card);
-};
+    // Adding eventListener to each Card-Object for the event 'click'.
+    newCard.element.addEventListener('click', function(event) {
+        // TODO: Fix desired functionality
+        if (firstPickedCard === null && event.target !== newCard) {
+            firstPickedCard = newCard
+            
+            // Showing the img
+            newCard.flip();
+        } else if (secondPickedCard === null && firstPickedCard !== newCard) {
+            secondPickedCard = newCard;
 
-// TODO: Update with proper element and values.
-gameboard.addEventListener('click', function (event) {
-    // Stop if event.target === gameboard
-    if (event.target.className !== 'gameboard') {
-        if (firstPickedCard === null) {
-            firstPickedCard = event.target;
-
-        } else if (secondPickedCard === null && firstPickedCard !== event.target) {
-            secondPickedCard = event.target;
+            // Showing the img
+            newCard.flip();
 
             // TODO: Add comparison.
             compareCards();
@@ -57,13 +53,15 @@ gameboard.addEventListener('click', function (event) {
             // TWO CARDS ARE ALREADY SELECTED
             console.log('two cards are already selected');
         };
-    };
+    });
 
-    console.log(firstPickedCard);
-    console.log(secondPickedCard);
-});
+    cardArray.push(newCard);
+};
 
-// Comparing cards
-function compareCards() {
+// Updating the imgSrc of Card-objects with images from Flickr-API.
+fetchImages(cardArray);
+
+// TODO: Compare the selected cards.
+function compareCards(cardOne, cardTwo) {
 
 };
