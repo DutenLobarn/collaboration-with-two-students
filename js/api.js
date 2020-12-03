@@ -1,6 +1,9 @@
 /* Getting Element from DOM */
 let gameboard = document.querySelector('.gameboard')
 
+/* Temporary Constructor, should be imported from construtor-module */
+
+
 
 /* Main function to fetch images */
 export function fetchImages(cardArr) {
@@ -26,6 +29,7 @@ export function fetchImages(cardArr) {
             for (let i = 0; i < cardArr.length; i++) {
                 cardArr[i].imgSrc = arrayOfUrls[i];
             }
+
         })
         .catch((err) => {
             console.log(err)
