@@ -1,5 +1,5 @@
 // CONSTRUCTOR
-function Card(_imgSrc) {
+export function Card(_imgSrc) {
     this.imgSrc = _imgSrc;
     this.flipped = false;
     this.element = document.createElement('div');
