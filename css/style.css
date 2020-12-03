@@ -3,3 +3,105 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.container {
+    max-width: 1200px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: url(/img/wood.jpg) center center/cover;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+.player-container {
+    width: 80%;
+    display: flex;
+    margin: 1rem auto;
+    justify-content: space-around
+}
+
+.players {
+    text-align: center;
+}
+
+.players h3 {
+    font-size: 2rem;
+}
+
+.main-section {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.score-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.score {
+    font-size: 1rem;
+    margin-top: -1rem;
+}
+
+.score-player-one,
+.score-player-two {
+    font-size: 5rem;
+}
+
+.gameboard {
+    max-width: 850px;
+    min-height: 600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    height: 130px;
+    width: 130px;
+    margin: 5px;
+    transition: transform 1s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+
+/* .card.flip, .card:hover{
+     transform: rotateY(180deg);
+ } */
+
+.front,
+.back {
+    /* height: 100%; 
+     width: 100%; 
+     position: absolute;  */
+    border-radius: 5px;
+}
+
+.front {
+    background: lightblue;
+    border: 5px dotted white;
+}
+
+.back {
+    background: yellow;
+    transform: rotateY(180deg)
+}
+
+.back img {
+    height: 130px;
+    width: 130px;
+}
