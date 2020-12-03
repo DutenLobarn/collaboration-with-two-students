@@ -1,48 +1,25 @@
-'use strict'
-import { fetchImages } from './api.js';
+console.log('Hello World!');
+console.log('Nina skapar detta lokalt på datorn'); 
+
+console.log('Nina Testar att göra en commit från en annan branch'); 
+
+console.log('Det här skrivs i samuelsbranch :)');
+
+/* bara för att ni ska se hur korten ser ut när de skapas på domen! */
 
 let gameboard = document.querySelector('.gameboard')
-
-// CONSTRUCTOR
-function Card(_imgSrc) {
-    this.imgSrc = _imgSrc;
-    this.flipped = false;
-    this.element = document.createElement('div');
-    this.element.classList.add('card');
-    this.element.classList.add('front');
-    this.element.style.order = Math.ceil(Math.random() * 1000);
-    gameboard.append(this.element);
-}
-
-Card.prototype.flip = function() {
-    this.flipped = true;
-    this.element.style.background = `url(${this.imgSrc})`;
-}
-Card.prototype.flipback = function() {
-        this.flipped = false;
-        this.element.style.background = `lightblue`;
-    }
-    // Constructor end
-
-// INITIATING CARD-OBJECTS
-const cardArray = [];
 for (let i = 0; i < 24; i++) {
-    let newCard = new Card(null);
+    let card = document.createElement('div')
+    card.classList.add('card')
 
-    newCard.element.addEventListener('click', function(event) {
-        if (!newCard.flipped) {
-            newCard.flip();
-        } else {
-            newCard.flipback();
-        }
-    });
+    let frontCard = document.createElement('div');
+    frontCard.classList.add('front')
 
-    cardArray.push(newCard);
-};
+    let backCard = document.createElement('div');
+    backCard.classList.add('back')
+    backCard.innerText = "Här ska bilderna från API-vara"
 
-console.log(cardArray);
-
-// Updating url-property of cards
-fetchImages(cardArray);
-
-let images = document.querySelectorAll('.card');
+    gameboard.appendChild(card);
+    card.appendChild(frontCard)
+    card.appendChild(backCard);
+}
