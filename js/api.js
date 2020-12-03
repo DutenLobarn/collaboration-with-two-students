@@ -4,7 +4,7 @@
 /* Removed temporary constructor */
 
 /* Main function to fetch images, the parameter is to send in the array of the memoryobjects*/
-function fetchImages(cardArr) {
+export function fetchImages(cardArr) {
 
     const key = 'e97530c4db33a4ae21d65f765fe9c551'
     let theme = 'dog'
@@ -78,6 +78,3 @@ function getImageUrl(photoObject) {
 //         card.appendChild(dogImg);
 //     }
 // }
-
-
-
