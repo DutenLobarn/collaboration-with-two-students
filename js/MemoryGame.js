@@ -7,14 +7,15 @@ import {fetchImages} from './api.js'
 
 
 // ***** ELEMENTS *****
-const gameboard = document.querySelector('.gameboard');
+const gameboard = document.querySelector('.gameboard'); // Redundant?
+const title = document.querySelector('.title h1');
 const playerOneTotalScoreElement = document.querySelector('.pone-total-score');
 const playerTwoTotalScoreElement = document.querySelector('.ptwo-total-score');
 const playerOneCurrentScoreElement = document.querySelector('.score-player-one');
 const playerTwoCurrentScoreElement = document.querySelector('.score-player-two');
 
 // ***** GLOBAL VARIABLES *****
-let totalGames = 0; // Keeping track of the totalt number of games (+1 once a player has won)
+let totalGames = 0; // Keeping track of the totalt number of games (+1 once a player has won) (REDUNDANT?)
 // TODO: Who starts?
 let currentPlayer = null; // Keeping track of whose turn it is (1 / 2);
 let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
@@ -95,12 +96,18 @@ function updateTotalScore (currentPlayer) {
         case 1:
             playerOneTotalScore += 1;
             playerOneTotalScoreElement.textContent = `Total Games Won: ${playerOneTotalScore}`;
+
+            // TODO: Update with dynamic name
+            title.textContent = `Player One has won!`
             break;
         case 2:
             playerTwoTotalScore += 1;
             playerTwoTotalScoreElement.textContent = `Total Games Won: ${playerTwoTotalScore}`;
+
+            // TODO: Update with dynamic name
+            title.textContent = `Player Two has won!`
             break;
     }
 
-    // TODO: Announce the winner!
+    pressToPlay.style.visibility = 'visible';
 }
