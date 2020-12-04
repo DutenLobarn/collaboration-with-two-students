@@ -36,6 +36,7 @@ input{
 
 .players {
     text-align: center;
+    width: 14rem; 
 }
 
 .players h3 {
