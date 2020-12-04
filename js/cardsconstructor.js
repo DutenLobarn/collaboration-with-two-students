@@ -17,7 +17,14 @@ Card.prototype.flip = function() {
     this.element.style.background = `url(${this.imgSrc})`;
 }
 Card.prototype.flipback = function() {
-        this.flipped = false;
-        this.element.style.background = `lightblue`;
+    this.flipped = false;
+    this.element.style.background = `lightblue`;
+}
+
+
+// försöker skapa en function som döljer korten om man får en dublett
+
+Card.prototype.dubblett = function() {
+        this.element.style.visibility = 'hidden';
     }
     // Constructor end
