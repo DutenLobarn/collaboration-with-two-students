@@ -109,3 +109,7 @@ h1 {
 .waiting-player {
     opacity: 0.5;
 }
+
+.play {
+    text-align: center;
+}
