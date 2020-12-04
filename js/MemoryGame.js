@@ -28,50 +28,72 @@ let secondPickedCard = null;
 // TODO: Move to app.js!
 const pressToPlay = document.querySelector('.play');
 pressToPlay.addEventListener('click', function(event) {
-    // Todo: Start the game.
-    console.log('Start the game!');
+    // Hiding 'Press here to play!' to prevent several instances of the memory to run simultaneously.
+    pressToPlay.style.visibility = 'hidden';
+
+    // Calling function startgame
+    startGame();
 });
 
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
-// Initiating Card-objects and pushing them to an array.
-const cardArray = [];
-for (let i = 0; i < 24; i++) {
-    let newCard = new Card(null);
+export function startGame() {
+    // Reseting the gameboard by removing old memorycards that already exists on the board.
+    while (gameboard.firstChild) {
+        gameboard.removeChild(gameboard.firstChild);
+    };
 
-    // Adding eventListener to each Card-Object for the event 'click'.
-    newCard.element.addEventListener('click', function(event) {
-        // TODO: Fix desired functionality
-        if (firstPickedCard === null && event.target !== newCard) {
-            firstPickedCard = newCard
-            console.log(firstPickedCard);
+    // Evaluates if currentplayer has a value and randomizes a value between 1 and 2 if it does not.
+    if (!currentPlayer) {
+        currentPlayer = Math.ceil(Math.random() * 2);
+    }
+    // Updating the DOM to show the current player.
+    showCurrentPlayer(currentPlayer);
 
-            // Showing the img
-            newCard.flip();
-        } else if (secondPickedCard === null && firstPickedCard !== newCard) {
-            secondPickedCard = newCard;
-            console.log(secondPickedCard);
+    /* ***** CREATING AND ADDING MEMORYCARDS TO THE GAMEBOARD  ***** */
+    // Defining an array that will hold the memorycards.
+    const cardArray = [];
 
-            // Showing the img
-            newCard.flip();
+    // Creating 24 new memorycards and adding them as elements to 'cardArray'.
+    for (let i = 0; i < 24; i++) {
+        let newCard = new Card(null);
 
-            // TODO: Add comparison.
-            compareCards(firstPickedCard, secondPickedCard);
-        } else {
-            // TWO CARDS ARE ALREADY SELECTED (Redundant?)
-            console.log('two cards are already selected');
-            // Logging to see that the cards referes to the correct card-objects.
-            console.log(firstPickedCard);
-            console.log(secondPickedCard);
-        };
-    });
+        // Adding eventListener to each Card-Object for the event 'click'.
+        newCard.element.addEventListener('click', function(event) {
+            // Selecting the first card.
+            if (firstPickedCard === null && event.target !== newCard) {
+                firstPickedCard = newCard
 
-    cardArray.push(newCard);
-};
+                // Turning the card to show the image.
+                newCard.flip();
 
-// Updating the imgSrc of Card-objects with images from Flickr-API.
-fetchImages(cardArray);
+            // Selecting the second card.
+            } else if (secondPickedCard === null && firstPickedCard !== newCard) {
+                secondPickedCard = newCard;
 
-// TODO: Compare the selected cards.
+                // Turning the card to show the image.
+                newCard.flip();
+
+                // Comparing the two selected cards.
+                compareCards(firstPickedCard, secondPickedCard);
+            } else {
+                // TODO: REMOVE? REDUNDANT?
+                // TWO CARDS ARE ALREADY SELECTED
+                console.log('two cards are already selected');
+                // Logging to see that the cards referes to the correct card-objects.
+                console.log(firstPickedCard);
+                console.log(secondPickedCard);
+            };
+        });
+
+        // Adding the newly created memorycard as element to 'cardArray'.
+        cardArray.push(newCard);
+    };
+
+    // Updating the imgSrc of Card-objects with images from Flickr-API.
+    fetchImages(cardArray);
+}
+
+// Comparing the selected cards
 function compareCards() {
     if (firstPickedCard.imgSrc === secondPickedCard.imgSrc) {
 
@@ -132,4 +154,17 @@ function updateTotalScore (currentPlayer) {
     }
 
     pressToPlay.style.visibility = 'visible';
+}
+
+function showCurrentPlayer (currentPlayer) {
+    switch (currentPlayer){
+        case 1:
+            playerOneTotalScoreElement.parentElement.classList.remove('waiting-player');
+            playerTwoTotalScoreElement.parentElement.classList.add('waiting-player');
+            break;
+        case 2:
+            playerOneTotalScoreElement.parentElement.classList.add('waiting-player');
+            playerTwoTotalScoreElement.parentElement.classList.remove('waiting-player');
+            break;
+    };
 }
