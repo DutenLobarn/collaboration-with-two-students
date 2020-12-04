@@ -19,9 +19,9 @@ let totalGames = 0; // Keeping track of the totalt number of games (+1 once a pl
 // TODO: Who starts?
 let currentPlayer = null; // Keeping track of whose turn it is (1 / 2);
 let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
-let playerOneTotalScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
+let playerOneTotalScore = 0; // Adding +1 once a game is won (if player1's turn).
 let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
-let playerTwoTotalScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
+let playerTwoTotalScore = 0; // Adding +1 once a game is won (if player2's turn).
 let firstPickedCard = null;
 let secondPickedCard = null;
 
@@ -140,11 +140,20 @@ function updateCurrentScore (currentPlayer) {
         playerTwoCurrentScoreElement.textContent = `${playerTwoCurrentScore}`;
     };
 
+    // Evaluates if the game is a draw
+    if (playerOneCurrentScore === 6 && playerTwoCurrentScore === 6) {
+        // Updating the DOM to let the players know the game ended in a draw.
+        title.textContent = `It's a draw!`
+
+        // Giving the players the ability to start a new round.
+        pressToPlay.textContent = 'Play again!';
+        pressToPlay.style.visibility = 'visible';
+    }
+
     // TODO: Evalute if one of the players won. (Yes/No)
     if (playerOneCurrentScore >= 7 || playerTwoCurrentScore >= 7) {
         updateTotalScore(currentPlayer);
     }
-    // TODO: ADD FUNCTIONALITY FOR DRAW! (Both scores = 6)
 }
 
 // Updating the current score of the currentPlayer (Winner).
@@ -167,6 +176,7 @@ function updateTotalScore (currentPlayer) {
     }
 
     // Reseting the current score of the players since the game is over.
+    //TODO: FIX ERROR WHERE THE SCORE IS RESET BUT THE PLAYERS KEEP ON PLAYING
     playerOneCurrentScore = 0;
     playerTwoCurrentScore = 0;
 
