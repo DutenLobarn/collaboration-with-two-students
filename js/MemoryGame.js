@@ -19,59 +19,81 @@ let totalGames = 0; // Keeping track of the totalt number of games (+1 once a pl
 // TODO: Who starts?
 let currentPlayer = null; // Keeping track of whose turn it is (1 / 2);
 let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
-let playerOneTotalScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
+let playerOneTotalScore = 0; // Adding +1 once a game is won (if player1's turn).
 let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
-let playerTwoTotalScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
+let playerTwoTotalScore = 0; // Adding +1 once a game is won (if player2's turn).
 let firstPickedCard = null;
 let secondPickedCard = null;
 
 // TODO: Move to app.js!
 const pressToPlay = document.querySelector('.play');
 pressToPlay.addEventListener('click', function(event) {
-    // Todo: Start the game.
-    console.log('Start the game!');
+    // Hiding 'Press here to play!' to prevent several instances of the memory to run simultaneously.
+    pressToPlay.style.visibility = 'hidden';
+
+    // Calling function startgame
+    startGame();
 });
 
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
-// Initiating Card-objects and pushing them to an array.
-const cardArray = [];
-for (let i = 0; i < 24; i++) {
-    let newCard = new Card(null);
+export function startGame() {
+    // Reseting the gameboard by removing old memorycards that already exists on the board.
+    while (gameboard.firstChild) {
+        gameboard.removeChild(gameboard.firstChild);
+    };
 
-    // Adding eventListener to each Card-Object for the event 'click'.
-    newCard.element.addEventListener('click', function(event) {
-        // TODO: Fix desired functionality
-        if (firstPickedCard === null && event.target !== newCard) {
-            firstPickedCard = newCard
-            console.log(firstPickedCard);
+    // Evaluates if currentplayer has a value and randomizes a value between 1 and 2 if it does not.
+    if (!currentPlayer) {
+        currentPlayer = Math.ceil(Math.random() * 2);
+    }
+    // Updating the DOM to show the current player.
+    showCurrentPlayer(currentPlayer);
 
-            // Showing the img
-            newCard.flip();
-        } else if (secondPickedCard === null && firstPickedCard !== newCard) {
-            secondPickedCard = newCard;
-            console.log(secondPickedCard);
+    /* ***** CREATING AND ADDING MEMORYCARDS TO THE GAMEBOARD  ***** */
+    // Defining an array that will hold the memorycards.
+    const cardArray = [];
 
-            // Showing the img
-            newCard.flip();
+    // Creating 24 new memorycards and adding them as elements to 'cardArray'.
+    for (let i = 0; i < 24; i++) {
+        let newCard = new Card(null);
 
-            // TODO: Add comparison.
-            compareCards(firstPickedCard, secondPickedCard);
-        } else {
-            // TWO CARDS ARE ALREADY SELECTED (Redundant?)
-            console.log('two cards are already selected');
-            // Logging to see that the cards referes to the correct card-objects.
-            console.log(firstPickedCard);
-            console.log(secondPickedCard);
-        };
-    });
+        // Adding eventListener to each Card-Object for the event 'click'.
+        newCard.element.addEventListener('click', function(event) {
+            // Selecting the first card.
+            if (firstPickedCard === null && event.target !== newCard) {
+                firstPickedCard = newCard
 
-    cardArray.push(newCard);
-};
+                // Turning the card to show the image.
+                newCard.flip();
 
-// Updating the imgSrc of Card-objects with images from Flickr-API.
-fetchImages(cardArray);
+            // Selecting the second card.
+            } else if (secondPickedCard === null && firstPickedCard !== newCard) {
+                secondPickedCard = newCard;
 
-// TODO: Compare the selected cards.
+                // Turning the card to show the image.
+                newCard.flip();
+
+                // Comparing the two selected cards.
+                compareCards(firstPickedCard, secondPickedCard);
+            } else {
+                // TODO: REMOVE? REDUNDANT?
+                // TWO CARDS ARE ALREADY SELECTED
+                console.log('two cards are already selected');
+                // Logging to see that the cards referes to the correct card-objects.
+                console.log(firstPickedCard);
+                console.log(secondPickedCard);
+            };
+        });
+
+        // Adding the newly created memorycard as element to 'cardArray'.
+        cardArray.push(newCard);
+    };
+
+    // Updating the imgSrc of Card-objects with images from Flickr-API.
+    fetchImages(cardArray);
+}
+
+// Comparing the selected cards
 function compareCards() {
     if (firstPickedCard.imgSrc === secondPickedCard.imgSrc) {
 
@@ -84,6 +106,8 @@ function compareCards() {
             secondPickedCard = null;
         }, 1100);
 
+        // Updating the score on the DOM.
+        updateCurrentScore(currentPlayer);
     } else {
           setTimeout(function() {
             firstPickedCard.flipback();
@@ -93,6 +117,16 @@ function compareCards() {
             secondPickedCard.flipback();
             secondPickedCard = null;
         }, 1100);
+
+        switch (currentPlayer) {
+            case 1:
+                currentPlayer = 2;
+                break;
+            case 2: currentPlayer = 1;
+                break;
+        }
+
+        showCurrentPlayer(currentPlayer);
     }
 };
 
@@ -106,10 +140,20 @@ function updateCurrentScore (currentPlayer) {
         playerTwoCurrentScoreElement.textContent = `${playerTwoCurrentScore}`;
     };
 
+    // Evaluates if the game is a draw
+    if (playerOneCurrentScore === 6 && playerTwoCurrentScore === 6) {
+        // Updating the DOM to let the players know the game ended in a draw.
+        title.textContent = `It's a draw!`
+
+        // Giving the players the ability to start a new round.
+        pressToPlay.textContent = 'Play again!';
+        pressToPlay.style.visibility = 'visible';
+    }
+
     // TODO: Evalute if one of the players won. (Yes/No)
-    // TODO: Announce the winner (how?)
-    // TODO: Update totalgames and Total Games Won.
-    // TODO: Reset currentscore and swap player.
+    if (playerOneCurrentScore >= 7 || playerTwoCurrentScore >= 7) {
+        updateTotalScore(currentPlayer);
+    }
 }
 
 // Updating the current score of the currentPlayer (Winner).
@@ -131,5 +175,26 @@ function updateTotalScore (currentPlayer) {
             break;
     }
 
+    // Reseting the current score of the players since the game is over.
+    //TODO: FIX ERROR WHERE THE SCORE IS RESET BUT THE PLAYERS KEEP ON PLAYING
+    playerOneCurrentScore = 0;
+    playerTwoCurrentScore = 0;
+
+    // Displaying 'Press to Play!' so the players can start another round.
+    pressToPlay.textContent = 'Play again!';
     pressToPlay.style.visibility = 'visible';
+}
+
+// Updating the DOM to show the current player selecting cards.
+function showCurrentPlayer (currentPlayer) {
+    switch (currentPlayer){
+        case 1:
+            playerOneTotalScoreElement.parentElement.classList.remove('waiting-player');
+            playerTwoTotalScoreElement.parentElement.classList.add('waiting-player');
+            break;
+        case 2:
+            playerOneTotalScoreElement.parentElement.classList.add('waiting-player');
+            playerTwoTotalScoreElement.parentElement.classList.remove('waiting-player');
+            break;
+    };
 }

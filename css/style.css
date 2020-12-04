@@ -106,6 +106,10 @@ h1 {
     width: 130px;
 }
 
-.play{
+.waiting-player {
+    opacity: 0.5;
+}
+
+.play {
     text-align: center;
 }
