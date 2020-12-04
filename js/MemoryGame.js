@@ -8,7 +8,6 @@ import { fetchImages } from './api.js'
 
 // ***** ELEMENTS *****
 const gameboard = document.querySelector('.gameboard'); // Redundant?
-const title = document.querySelector('.title h1');
 const playerOneTotalScoreElement = document.querySelector('.pone-total-score');
 const playerTwoTotalScoreElement = document.querySelector('.ptwo-total-score');
 const playerOneCurrentScoreElement = document.querySelector('.score-player-one');
@@ -38,6 +37,7 @@ pressToPlay.addEventListener('click', function(event) {
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
 export function startGame() {
     // Reseting the gameboard by removing old memorycards that already exists on the board.
+    gameboard.style.pointerEvents = 'auto';
     while (gameboard.firstChild) {
         gameboard.removeChild(gameboard.firstChild);
     };
@@ -48,6 +48,13 @@ export function startGame() {
     }
     // Updating the DOM to show the current player.
     showCurrentPlayer(currentPlayer);
+
+    // Reseting current score of both players
+    playerOneCurrentScore = 0;
+    playerOneCurrentScoreElement.textContent = 0;
+    playerTwoCurrentScore = 0;
+    playerTwoCurrentScoreElement.textContent = 0;
+
 
     /* ***** CREATING AND ADDING MEMORYCARDS TO THE GAMEBOARD  ***** */
     // Defining an array that will hold the memorycards.
@@ -60,14 +67,14 @@ export function startGame() {
         // Adding eventListener to each Card-Object for the event 'click'.
         newCard.element.addEventListener('click', function(event) {
             // Selecting the first card.
-            if (firstPickedCard === null && event.target !== newCard) {
+            if (newCard.imgSrc !== null && firstPickedCard === null && event.target !== newCard) {
                 firstPickedCard = newCard
 
                 // Turning the card to show the image.
                 newCard.flip();
 
             // Selecting the second card.
-            } else if (secondPickedCard === null && firstPickedCard !== newCard) {
+            } else if (newCard.imgSrc !== null && secondPickedCard === null && firstPickedCard !== newCard) {
                 secondPickedCard = newCard;
 
                 // Turning the card to show the image.
@@ -143,11 +150,8 @@ function updateCurrentScore (currentPlayer) {
     // Evaluates if the game is a draw
     if (playerOneCurrentScore === 6 && playerTwoCurrentScore === 6) {
         // Updating the DOM to let the players know the game ended in a draw.
-        title.textContent = `It's a draw!`
-
-        // Giving the players the ability to start a new round.
-        pressToPlay.textContent = 'Play again!';
-        pressToPlay.style.visibility = 'visible';
+        let winnerText = `It's a draw!`;
+            endGame(winnerText);
     }
 
     // TODO: Evalute if one of the players won. (Yes/No)
@@ -158,31 +162,26 @@ function updateCurrentScore (currentPlayer) {
 
 // Updating the current score of the currentPlayer (Winner).
 function updateTotalScore (currentPlayer) {
+    let winnerText = '';
+    
     switch (currentPlayer) {
         case 1:
             playerOneTotalScore += 1;
             playerOneTotalScoreElement.textContent = `Total Games Won: ${playerOneTotalScore}`;
 
             // TODO: Update with dynamic name
-            title.textContent = `Player One has won!`
+            winnerText = `Player One has won!`;
+            endGame(winnerText);
             break;
         case 2:
             playerTwoTotalScore += 1;
             playerTwoTotalScoreElement.textContent = `Total Games Won: ${playerTwoTotalScore}`;
 
             // TODO: Update with dynamic name
-            title.textContent = `Player Two has won!`
+            winnerText = `Player Two has won!`;
+            endGame(winnerText);
             break;
     }
-
-    // Reseting the current score of the players since the game is over.
-    //TODO: FIX ERROR WHERE THE SCORE IS RESET BUT THE PLAYERS KEEP ON PLAYING
-    playerOneCurrentScore = 0;
-    playerTwoCurrentScore = 0;
-
-    // Displaying 'Press to Play!' so the players can start another round.
-    pressToPlay.textContent = 'Play again!';
-    pressToPlay.style.visibility = 'visible';
 }
 
 // Updating the DOM to show the current player selecting cards.
@@ -198,3 +197,24 @@ function showCurrentPlayer (currentPlayer) {
             break;
     };
 }
+
+function endGame (text) {
+    // Preventing further clicks on the memorycards since the game is over.
+    gameboard.style.pointerEvents = 'none';
+
+    // Creating a new <p>-element
+    let newText = document.createElement('p');
+    newText.textContent = text;
+    newText.style.position = 'absolute';
+    newText.style.zIndex = '10';
+    newText.style.marginTop = '10rem';
+    newText.style.fontSize = '2rem';
+
+    // Appending the created <p>-element as child to gameboard.
+    gameboard.append(newText);
+
+    // Displaying 'Press to Play!' to give the players the ability to start a new round.
+    pressToPlay.textContent = 'Play again!';
+    pressToPlay.style.visibility = 'visible';
+};
+
