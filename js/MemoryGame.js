@@ -8,17 +8,19 @@ import {fetchImages} from './api.js'
 
 // ***** ELEMENTS *****
 const gameboard = document.querySelector('.gameboard');
-const playerOneTotalScore = document.querySelector('.pone-total-score');
-const playerTwoTotalScore = document.querySelector('.ptwo-total-score');
-const playerOneCurrentScore = document.querySelector('.score-player-one');
-const playerTwoCurrentScore = document.querySelector('.score-player-two');
+const playerOneTotalScoreElement = document.querySelector('.pone-total-score');
+const playerTwoTotalScoreElement = document.querySelector('.ptwo-total-score');
+const playerOneCurrentScoreElement = document.querySelector('.score-player-one');
+const playerTwoCurrentScoreElement = document.querySelector('.score-player-two');
 
 // ***** GLOBAL VARIABLES *****
 let totalGames = 0; // Keeping track of the totalt number of games (+1 once a player has won)
 // TODO: Who starts?
 let currentPlayer = null; // Keeping track of whose turn it is (1 / 2);
-let playerOneScore= 0; // Adding +1 once two of the same card is found (if player1's turn).
-let playerTwoScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
+let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
+let playerOneTotalScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
+let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
+let playerTwoTotalScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
 let firstPickedCard = null;
 let secondPickedCard = null;
 
@@ -72,15 +74,33 @@ function compareCards(cardOne, cardTwo) {
 };
 
 // Updating the current score of the current player.
-function updateCurrentScore (currentPlayer, playerScore) {
+function updateCurrentScore (currentPlayer) {
     if (currentPlayer === 1) {
-        playerOneCurrentScore.textContent = `${playerScore}`;
+        playerOneCurrentScore += 1;
+        playerOneCurrentScoreElement.textContent = `${playerOneCurrentScore}`;
     } else if (currentPlayer === 2) {
-        playerTwoCurrentScore.textContent = `${playerScore}`;
+        playerTwoCurrentScore += 1;
+        playerTwoCurrentScoreElement.textContent = `${playerTwoCurrentScore}`;
     };
 
     // TODO: Evalute if one of the players won. (Yes/No)
     // TODO: Announce the winner (how?)
     // TODO: Update totalgames and Total Games Won.
     // TODO: Reset currentscore and swap player.
+}
+
+// Updating the current score of the currentPlayer (Winner).
+function updateTotalScore (currentPlayer) {
+    switch (currentPlayer) {
+        case 1:
+            playerOneTotalScore += 1;
+            playerOneTotalScoreElement.textContent = `Total Games Won: ${playerOneTotalScore}`;
+            break;
+        case 2:
+            playerTwoTotalScore += 1;
+            playerTwoTotalScoreElement.textContent = `Total Games Won: ${playerTwoTotalScore}`;
+            break;
+    }
+
+    // TODO: Announce the winner!
 }
