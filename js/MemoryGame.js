@@ -106,6 +106,8 @@ function compareCards() {
             secondPickedCard = null;
         }, 1100);
 
+        // Updating the score on the DOM.
+        updateCurrentScore(currentPlayer);
     } else {
           setTimeout(function() {
             firstPickedCard.flipback();
@@ -115,6 +117,16 @@ function compareCards() {
             secondPickedCard.flipback();
             secondPickedCard = null;
         }, 1100);
+
+        switch (currentPlayer) {
+            case 1:
+                currentPlayer = 2;
+                break;
+            case 2: currentPlayer = 1;
+                break;
+        }
+
+        showCurrentPlayer(currentPlayer);
     }
 };
 
@@ -129,9 +141,10 @@ function updateCurrentScore (currentPlayer) {
     };
 
     // TODO: Evalute if one of the players won. (Yes/No)
-    // TODO: Announce the winner (how?)
-    // TODO: Update totalgames and Total Games Won.
-    // TODO: Reset currentscore and swap player.
+    if (playerOneCurrentScore >= 7 || playerTwoCurrentScore >= 7) {
+        updateTotalScore(currentPlayer);
+    }
+    // TODO: ADD FUNCTIONALITY FOR DRAW! (Both scores = 6)
 }
 
 // Updating the current score of the currentPlayer (Winner).
@@ -153,9 +166,16 @@ function updateTotalScore (currentPlayer) {
             break;
     }
 
+    // Reseting the current score of the players since the game is over.
+    playerOneCurrentScore = 0;
+    playerTwoCurrentScore = 0;
+
+    // Displaying 'Press to Play!' so the players can start another round.
+    pressToPlay.textContent = 'Play again!';
     pressToPlay.style.visibility = 'visible';
 }
 
+// Updating the DOM to show the current player selecting cards.
 function showCurrentPlayer (currentPlayer) {
     switch (currentPlayer){
         case 1:
