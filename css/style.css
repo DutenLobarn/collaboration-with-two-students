@@ -28,6 +28,12 @@ h1 {
     justify-content: space-around
 }
 
+input{
+    padding: 0.5rem; 
+    border-radius: 5px;
+    margin-bottom: 0.5rem;   
+}
+
 .players {
     text-align: center;
 }
@@ -35,6 +41,17 @@ h1 {
 .players h3 {
     font-size: 2rem;
 }
+
+.play{
+    width: 400px; 
+}
+
+.play h3{
+    cursor: pointer;
+    height: 2rem; 
+    animation: blink 2s linear infinite; 
+}
+
 
 .main-section {
     width: 90%;
@@ -76,6 +93,7 @@ h1 {
     margin: 5px;
     transition: transform 1s ease-in-out;
     transform-style: preserve-3d;
+    cursor: pointer;
 }
 
 
@@ -109,3 +127,18 @@ h1 {
 .play{
     text-align: center;
 }
+
+
+
+@keyframes blink{ 
+    0%{ 
+      opacity: 0.4; 
+    } 
+    50%{ 
+      opacity: 0.9; 
+      font-size: 1.3rem;
+    } 
+    100%{ 
+      opacity: 0.4; 
+    } 
+  } 
