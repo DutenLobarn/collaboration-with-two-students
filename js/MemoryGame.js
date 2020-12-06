@@ -1,7 +1,7 @@
 // MODULE MemoryGAME
 'use strict'
 
-// TODO: Add imports from API and MemoryCard!
+// Importing from API and MemoryCard.
 import { Card } from './cardsconstructor.js'
 import { fetchImages } from './api.js'
 
@@ -14,15 +14,13 @@ const playerOneCurrentScoreElement = document.querySelector('.score-player-one')
 const playerTwoCurrentScoreElement = document.querySelector('.score-player-two');
 
 // ***** GLOBAL VARIABLES *****
-let totalGames = 0; // Keeping track of the totalt number of games (+1 once a player has won) (REDUNDANT?)
-// TODO: Who starts?
-let currentPlayer = null; // Keeping track of whose turn it is (1 / 2);
+let currentPlayer = null; // Keeping track of whose turn it is (1 / 2), first round will be randomized.
 let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
 let playerOneTotalScore = 0; // Adding +1 once a game is won (if player1's turn).
 let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
 let playerTwoTotalScore = 0; // Adding +1 once a game is won (if player2's turn).
-let firstPickedCard = null;
-let secondPickedCard = null;
+let firstPickedCard = null; // The first card selected by the user.
+let secondPickedCard = null; // The second card selected by the user.
 
 // TODO: Move to app.js!
 const pressToPlay = document.querySelector('.play');
@@ -51,9 +49,9 @@ export function startGame() {
 
     // Reseting current score of both players
     playerOneCurrentScore = 0;
-    playerOneCurrentScoreElement.textContent = 0;
+    playerOneCurrentScoreElement.textContent = '0';
     playerTwoCurrentScore = 0;
-    playerTwoCurrentScoreElement.textContent = 0;
+    playerTwoCurrentScoreElement.textContent = '0';
 
 
     /* ***** CREATING AND ADDING MEMORYCARDS TO THE GAMEBOARD  ***** */
@@ -150,11 +148,11 @@ function updateCurrentScore (currentPlayer) {
     // Evaluates if the game is a draw
     if (playerOneCurrentScore === 6 && playerTwoCurrentScore === 6) {
         // Updating the DOM to let the players know the game ended in a draw.
-        let winnerText = `It's a draw!`;
+        let winnerText = `The game eneded in a draw!`;
             endGame(winnerText);
     }
 
-    // TODO: Evalute if one of the players won. (Yes/No)
+    // Evaluates if on of the players won
     if (playerOneCurrentScore >= 7 || playerTwoCurrentScore >= 7) {
         updateTotalScore(currentPlayer);
     }
