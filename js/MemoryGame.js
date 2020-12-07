@@ -23,17 +23,17 @@ let firstPickedCard = null; // The first card selected by the user.
 let secondPickedCard = null; // The second card selected by the user.
 
 // TODO: Move to app.js!
-const pressToPlay = document.querySelector('.play');
+const pressToPlay = document.querySelector('.play h3'); // NINA: CHANGED IT TO TARGET THE H3 
 pressToPlay.addEventListener('click', function(event) {
     // Hiding 'Press here to play!' to prevent several instances of the memory to run simultaneously.
     pressToPlay.style.visibility = 'hidden';
 
     // Calling function startgame
-    startGame();
+    // startGame(); // NINA: CALLING IT IN APP.JS INSTEAD
 });
 
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
-export function startGame() {
+export function startGame(theme, numOfCards) { // NINA: ADDED PARAMETER x2 FOR USERINPUTS
     // Reseting the gameboard by removing old memorycards that already exists on the board.
     gameboard.style.pointerEvents = 'auto';
     while (gameboard.firstChild) {
@@ -59,7 +59,7 @@ export function startGame() {
     const cardArray = [];
 
     // Creating 24 new memorycards and adding them as elements to 'cardArray'.
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < numOfCards; i++) { // NINA: CHANGED < 24 TO THE PARAMETER OF HOW MANY CARDS
         let newCard = new Card(null);
 
         // Adding eventListener to each Card-Object for the event 'click'.
@@ -79,7 +79,7 @@ export function startGame() {
                 newCard.flip();
 
                 // Comparing the two selected cards.
-                compareCards(firstPickedCard, secondPickedCard);
+                compareCards(numOfCards); // NINA: REMOVED FIRST&SECOND PICKED CARDS, WAS NOT USING? ADDED PARAMETER FOR NUMOFCARDS
             } else {
                 // TODO: REMOVE? REDUNDANT?
                 // TWO CARDS ARE ALREADY SELECTED
@@ -95,11 +95,11 @@ export function startGame() {
     };
 
     // Updating the imgSrc of Card-objects with images from Flickr-API.
-    fetchImages(cardArray);
+    fetchImages(cardArray, theme, numOfCards); // NINA: ADDED SAME PARAMETERS AS TO STARTGAME, SENDING IT TO THE API FETCH
 }
 
 // Comparing the selected cards
-function compareCards() {
+function compareCards(numOfCards) {
     if (firstPickedCard.imgSrc === secondPickedCard.imgSrc) {
 
         setTimeout(function() {
@@ -112,7 +112,7 @@ function compareCards() {
         }, 1100);
 
         // Updating the score on the DOM.
-        updateCurrentScore(currentPlayer);
+        updateCurrentScore(currentPlayer, numOfCards); // NINA: ADDED numOfCards PARAMETER
     } else {
           setTimeout(function() {
             firstPickedCard.flipback();
@@ -136,7 +136,7 @@ function compareCards() {
 };
 
 // Updating the current score of the current player.
-function updateCurrentScore (currentPlayer) {
+function updateCurrentScore (currentPlayer, numOfCards) { // NINA: ADDED numOfCards PARAMETER
     if (currentPlayer === 1) {
         playerOneCurrentScore += 1;
         playerOneCurrentScoreElement.textContent = `${playerOneCurrentScore}`;
@@ -145,17 +145,23 @@ function updateCurrentScore (currentPlayer) {
         playerTwoCurrentScoreElement.textContent = `${playerTwoCurrentScore}`;
     };
 
+    // NINA: CALCULATING THE NUMBER FOR A DRAW GAME! 
+    let drawNum = (numOfCards / 2) / 2; 
+    
+    // NINA: CALCULATING THE NUMBER THAT IT TAKES TO WIN THE GAME
+    let winnerNum = Math.floor((numOfCards / 2) / 2 + 1); 
+
     // Evaluates if the game is a draw
-    if (playerOneCurrentScore === 6 && playerTwoCurrentScore === 6) {
+    if (playerOneCurrentScore === drawNum && playerTwoCurrentScore === drawNum) { // NINA: CHANGED 6 TO drawNum
         // Updating the DOM to let the players know the game ended in a draw.
         let winnerText = `The game eneded in a draw!`;
             endGame(winnerText);
     }
 
     // Evaluates if on of the players won
-    if (playerOneCurrentScore >= 7 || playerTwoCurrentScore >= 7) {
+    if (playerOneCurrentScore >= winnerNum || playerTwoCurrentScore >= winnerNum) { // NINA: CHANGED 7 TO winnerNum
         updateTotalScore(currentPlayer);
-    }
+    } 
 }
 
 // Updating the current score of the currentPlayer (Winner).
