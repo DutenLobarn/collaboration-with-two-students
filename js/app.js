@@ -73,8 +73,8 @@ function userInputs(){
     box.style.margin = '-5rem auto';
 
     // Updating text
-    boxText.innerText = 'How many cards do you want to play with? (Maximum: 40)'; 
-    boxExample.innerText = 'Must be an even number!';   
+    boxText.innerText = 'How many cards do you want to play with? \n (Minimum: 8 Maximum: 40)'; 
+    boxExample.innerText = 'Must be an even number';   
 
     // setting eventListener so we can collect input Value and take proper action
     howManyCardsInput.addEventListener('keypress', function (e) {
@@ -85,10 +85,13 @@ function userInputs(){
             if(isNaN(numOfCards)) {
                 boxText.innerText = "Only use numbers please!"
             } // if its not an even number, or more than 40
-            else if (numOfCards % 2 !== 0 || numOfCards > 40) { 
+            else if (numOfCards % 2 !== 0 || numOfCards > 40 || numOfCards < 8) { 
 
                 if(numOfCards > 40) {
                     boxText.innerText = "You can't play with more than 40 cards.. How hard do you want it to be?"
+                }
+                if(numOfCards < 8) {
+                    boxText.innerText = "You must have atleast 8 cards. Come on, it shouldn't be that easy!" 
                 }
                 else if(numOfCards % 2 !== 0) {
                     boxText.innerText = "You can't play memory with an uneven number of cards :( Try again!"
