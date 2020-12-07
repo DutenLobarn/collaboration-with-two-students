@@ -1,13 +1,19 @@
 import { startGame } from './MemoryGame.js'
 
+// Getting elements from DOM
 let playerOne = document.querySelector('.player-one')
 let playerTwo = document.querySelector('.player-two')
-
+// Setting them to display none from start
 playerOne.style.display = 'none';
 playerTwo.style.display = 'none';
 
-let pressToPlay = document.querySelector('.play h3');
+let boxContainer = document.querySelector('.box-container');
+let box = document.querySelector('.input-box')
+let boxText = document.querySelector('.box-text');
+let boxExample = document.querySelector('.box-example');
 
+let pressToPlay = document.querySelector('.play h3');
+// Making a click-event for the start text! Now user can write their "wishes", and we start the game! 
 pressToPlay.addEventListener('click', function (e) {
     displayNames();
     userInputs();
@@ -53,49 +59,32 @@ function errorHandling(){
     }
 }
 
-// TODO: MOVE STYLES TO CSS?? 
-let boxContainer = document.querySelector('.box-container');
-let box = document.createElement('div');
-box.classList.add('input-box')
-
-let boxText = document.createElement('p');
-boxText.classList.add('box-text')
-boxText.style.fontSize = '1.5rem';
-boxText.style.width = '70%';
-let boxExample = document.createElement('p');
-boxExample.style.fontSize = '1rem';
-boxExample.style.marginBottom = '0.8rem';
-
-let howManyCardsInput = document.createElement('input')
-howManyCardsInput.setAttribute('type', 'text');
-howManyCardsInput.setAttribute('placeholder', 'type how many cards here');
-
-let container = document.querySelector('.player-container')
-container.insertAdjacentElement('afterend', boxContainer)
-boxContainer.appendChild(box)
-box.appendChild(boxText);
-box.appendChild(boxExample);
-box.appendChild(howManyCardsInput);
-
-
 function userInputs(){ 
 
-    boxContainer.style.opacity = '0.8'
+    // creating input for how many cards and appending it to the box
+    let howManyCardsInput = document.createElement('input')
+    howManyCardsInput.setAttribute('type', 'text');
+    howManyCardsInput.setAttribute('placeholder', 'Type how many cards here');
+    box.appendChild(howManyCardsInput);
+
+    // Showing the box
     boxContainer.style.display = 'block'
+    boxContainer.style.opacity = '0.8'
     box.style.margin = '-5rem auto';
 
-    howManyCardsInput.style.display = 'block'
+    // Updating text
     boxText.innerText = 'How many cards do you want to play with? (Maximum: 40)'; 
     boxExample.innerText = 'Must be an even number!';   
 
+    // setting eventListener so we can collect input Value and take proper action
     howManyCardsInput.addEventListener('keypress', function (e) {
         if (e.key == 'Enter' && e.target.value != '') {
             let numOfCards = e.target.value;
-            console.log(numOfCards);
-            
+    
+            // If its not a number
             if(isNaN(numOfCards)) {
                 boxText.innerText = "Only use numbers please!"
-            }
+            } // if its not an even number, or more than 40
             else if (numOfCards % 2 !== 0 || numOfCards > 40) { 
 
                 if(numOfCards > 40) {
@@ -106,30 +95,37 @@ function userInputs(){
                 }
 
             }
-            else {
+            else { // If everyhing is OK!
+                // Hiding first input
                 howManyCardsInput.style.display = 'none';
+                // Creating a new input for the theme and updating text
                 let themeInput = document.createElement('input')
                 themeInput.setAttribute('type', 'text');
                 themeInput.setAttribute('placeholder', 'Type theme here');
                 boxText.innerText = 'What theme you would like to use for your cards?'
                 boxExample.innerText = '(For example animal, nature or sport) '
                 box.appendChild(themeInput)
-
-                e.target.value = '';
-    
+                
+                // Setting eventlistener to new input so we can collect theme, and start the game
                 themeInput.addEventListener('keypress', function (e) {
                     if (e.key == 'Enter' && e.target.value != '') {
                         let themeValue = themeInput.value;
-                        boxContainer.style.opacity = '0.3'
-                        boxContainer.style.display = 'none'
+                        
+                        // Hiding container
+                        boxContainer.style.display = 'none'; 
+                        
+                        // Starting the game, and sending it the two values collected from user
                         startGame(themeValue, numOfCards);
 
+                        // hiding the input for next time
                         themeInput.style.display = 'none'; 
-    
+                        
+                        // emptying input
                         e.target.value = '';
                     }
                 }) 
             }
+           // emptying input
         e.target.value = '';
         }
     })
