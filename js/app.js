@@ -1,25 +1,35 @@
-console.log('Hello World!');
-console.log('Nina skapar detta lokalt på datorn'); 
+let playerOne = document.querySelector('.player-one')
+let playerTwo = document.querySelector('.player-two')
 
-console.log('Nina Testar att göra en commit från en annan branch'); 
+playerOne.style.display = 'none'; 
+playerTwo.style.display = 'none'; 
+let pressToPlay = document.querySelector('.play h3'); 
 
-console.log('Det här skrivs i samuelsbranch :)');
+pressToPlay.addEventListener('click', function(e) {
+    enterNames(); 
+})
 
-/* bara för att ni ska se hur korten ser ut när de skapas på domen! */
 
-let gameboard = document.querySelector('.gameboard')
-for (let i = 0; i < 24; i++) {
-    let card = document.createElement('div')
-    card.classList.add('card')
 
-    let frontCard = document.createElement('div');
-    frontCard.classList.add('front')
+function enterNames(){
+    let input = document.querySelectorAll('input')
+    
+    if (input[0].value.length !== 0) {
+        playerOne.innerText = input[0].value;
+    } else {
+        playerOne.innerText = 'Player One'
+    }
 
-    let backCard = document.createElement('div');
-    backCard.classList.add('back')
-    backCard.innerText = "Här ska bilderna från API-vara"
+    if (input[1].value.length !== 0) {
+        playerTwo.innerText = input[1].value;
+    } else {
+        playerTwo.innerText = 'Player Two'
+    }
+    
+    playerOne.style.display = 'block'; 
+    playerTwo.style.display = 'block'; 
 
-    gameboard.appendChild(card);
-    card.appendChild(frontCard)
-    card.appendChild(backCard);
+    input[0].style.display = 'none'
+    input[1].style.display = 'none'
 }
+
