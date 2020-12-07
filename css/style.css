@@ -147,6 +147,17 @@ input{
     box-shadow: 5px 10px 20px 10px rgba(0,0,0,0.3); 
 }
 
+.box-text{
+    font-size: 1.5rem;
+    width: 70%; 
+    margin-bottom: 0.8rem;
+}
+
+.box-example{
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+}
+
 
 @keyframes blink{ 
     0%{ 
