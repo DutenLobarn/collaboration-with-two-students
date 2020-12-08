@@ -15,6 +15,7 @@ export function Card(_imgSrc) {
     this.element.append(this.img);
 };
 
+// A prototyp function that flips the choosen card and show the picture fetched from the API.
 Card.prototype.flip = function() {
     this.flipped = true;
     this.img.src = this.imgSrc;
@@ -23,6 +24,7 @@ Card.prototype.flip = function() {
     this.img.classList.remove('hidecard');
 }
 
+// 
 Card.prototype.flipback = function() {
     this.flipped = false;
     this.element.classList.remove('flip');
@@ -35,5 +37,5 @@ Card.prototype.flipback = function() {
 
 Card.prototype.dubblett = function() {
         this.element.style.visibility = 'hidden';
-}
-// Constructor end
+    }
+    // Constructor end
