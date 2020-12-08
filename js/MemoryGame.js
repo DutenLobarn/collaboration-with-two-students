@@ -16,16 +16,18 @@ const playerTwoCurrentScoreElement = document.querySelector('.score-player-two')
 
 // ***** GLOBAL VARIABLES *****
 let currentPlayer = null; // Keeping track of whose turn it is (1 / 2), first round will be randomized.
-let playerOneCurrentScore = 0; // Adding +1 once two of the same card is found (if player1's turn).
-let playerOneTotalScore = 0; // Adding +1 once a game is won (if player1's turn).
-let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. (if player2's turn).
-let playerTwoTotalScore = 0; // Adding +1 once a game is won (if player2's turn).
+let playerOneCurrentScore = 0; // Adding +1 when two of the same card is found (if player1's turn).
+let playerOneTotalScore = 0; // Adding +1 when a game is won (if player1's turn).
+let playerTwoCurrentScore = 0; // Adding +1 when two of the same card is found. (if player2's turn).
+let playerTwoTotalScore = 0; // Adding +1 when a game is won (if player2's turn).
 let firstPickedCard = null; // The first card selected by the user.
 let secondPickedCard = null; // The second card selected by the user.
 
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
-export function startGame(theme, numOfCards) { // NINA: ADDED PARAMETER x2 FOR USERINPUTS
+// Parameter one defines the theme on the images, paramter two decides the total number of card-objects created.
+export function startGame(theme, numOfCards) {
     // Reseting the gameboard by removing old memorycards that already exists on the board.
+    // Making the gameboard targetable by pointer-events (removed when a winner is declared).
     gameboard.style.pointerEvents = 'auto';
     while (gameboard.firstChild) {
         gameboard.removeChild(gameboard.firstChild);
@@ -49,8 +51,8 @@ export function startGame(theme, numOfCards) { // NINA: ADDED PARAMETER x2 FOR U
     // Defining an array that will hold the memorycards.
     const cardArray = [];
 
-    // Creating 24 new memorycards and adding them as elements to 'cardArray'.
-    for (let i = 0; i < numOfCards; i++) { // NINA: CHANGED < 24 TO THE PARAMETER OF HOW MANY CARDS
+    // Creating numbOfCards(dynamic value) new memorycards and adding them as elements to 'cardArray'.
+    for (let i = 0; i < numOfCards; i++) {
         let newCard = new Card(null);
 
         // Adding eventListener to each Card-Object for the event 'click'.
@@ -70,23 +72,16 @@ export function startGame(theme, numOfCards) { // NINA: ADDED PARAMETER x2 FOR U
                 newCard.flip();
 
                 // Comparing the two selected cards.
-                compareCards(numOfCards); // NINA: REMOVED FIRST&SECOND PICKED CARDS, WAS NOT USING? ADDED PARAMETER FOR NUMOFCARDS
-            } else {
-                // TODO: REMOVE? REDUNDANT?
-                // TWO CARDS ARE ALREADY SELECTED
-                console.log('two cards are already selected');
-                // Logging to see that the cards referes to the correct card-objects.
-                console.log(firstPickedCard);
-                console.log(secondPickedCard);
-            };
+                compareCards(numOfCards);
+            } 
         });
 
         // Adding the newly created memorycard as element to 'cardArray'.
         cardArray.push(newCard);
     };
 
-    // Updating the imgSrc of Card-objects with images from Flickr-API.
-    fetchImages(cardArray, theme, numOfCards); // NINA: ADDED SAME PARAMETERS AS TO STARTGAME, SENDING IT TO THE API FETCH
+    // Updating the imgSrc of Card-objects with images from Flickr-API with user-defined theme.
+    fetchImages(cardArray, theme, numOfCards);
 }
 
 // Comparing the selected cards
@@ -103,7 +98,7 @@ function compareCards(numOfCards) {
         }, 1100);
 
         // Updating the score on the DOM.
-        updateCurrentScore(currentPlayer, numOfCards); // NINA: ADDED numOfCards PARAMETER
+        updateCurrentScore(currentPlayer, numOfCards);
     } else {
           setTimeout(function() {
             firstPickedCard.flipback();
@@ -127,8 +122,8 @@ function compareCards(numOfCards) {
     }
 };
 
-// Updating the current score of the current player.
-function updateCurrentScore (currentPlayer, numOfCards) { // NINA: ADDED numOfCards PARAMETER
+// Updating the current score of the current player, calcualting win condition based on total number of cards (numOfCards).
+function updateCurrentScore (currentPlayer, numOfCards) {
     if (currentPlayer === 1) {
         playerOneCurrentScore += 1;
         playerOneCurrentScoreElement.textContent = `${playerOneCurrentScore}`;
@@ -136,22 +131,22 @@ function updateCurrentScore (currentPlayer, numOfCards) { // NINA: ADDED numOfCa
         playerTwoCurrentScore += 1;
         playerTwoCurrentScoreElement.textContent = `${playerTwoCurrentScore}`;
     };
-
-    // NINA: CALCULATING THE NUMBER FOR A DRAW GAME! 
+ 
+    // Calculating the number for a draw game! 
     let drawNum = (numOfCards / 2) / 2; 
     
-    // NINA: CALCULATING THE NUMBER THAT IT TAKES TO WIN THE GAME
+    // Calculating the number that it takes to win the game
     let winnerNum = Math.floor((numOfCards / 2) / 2 + 1); 
 
     // Evaluates if the game is a draw
-    if (playerOneCurrentScore === drawNum && playerTwoCurrentScore === drawNum) { // NINA: CHANGED 6 TO drawNum
+    if (playerOneCurrentScore === drawNum && playerTwoCurrentScore === drawNum) {
         // Updating the DOM to let the players know the game ended in a draw.
         let winnerText = `The game ended in a draw!`;
             endGame(winnerText);
     }
 
     // Evaluates if one of the players won
-    if (playerOneCurrentScore >= winnerNum || playerTwoCurrentScore >= winnerNum) { // NINA: CHANGED 7 TO winnerNum
+    if (playerOneCurrentScore >= winnerNum || playerTwoCurrentScore >= winnerNum) {
         updateTotalScore(currentPlayer);
     } 
 }
