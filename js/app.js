@@ -17,7 +17,9 @@ let pressToPlay = document.querySelector('.play h3');
 pressToPlay.addEventListener('click', function (e) {
     displayNames();
     userInputs();
-    errorHandling(); 
+    errorHandling();
+
+    pressToPlay.style.visibility = 'hidden';
 })
 
 // function to put the names of the players on DOM
@@ -133,9 +135,3 @@ function userInputs(){
         }
     })
 }
-
-
-
-
-// }
-

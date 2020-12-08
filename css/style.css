@@ -8,7 +8,7 @@
     max-width: 1200px;
     min-height: 100vh;
     margin: 0 auto;
-    background: url(/img/wood.jpg) center center/cover;
+    background: url('../img/wood.jpg') center center/cover;
 }
 
 .title {
@@ -92,27 +92,31 @@ input{
     height: 130px;
     width: 130px;
     margin: 5px;
-    transition: transform 1s ease-in-out;
+    /* Faster animation */
+    transition: transform 0.55s ease-in-out;
     transform-style: preserve-3d;
     cursor: pointer;
     background: lightblue;
     border: 5px dotted white;
+    position: relative;
 }
 
-
-.card.flip{
+.flip {
     transform: rotateY(180deg);
 }
 
 .back {
     height: 100%; 
-     width: 100%; 
-     position: absolute; 
+    width: 100%;
+    position: absolute;
     border-radius: 5px;
+
+    transform: rotateY(-180deg);
+    backface-visibility: hidden;
 }
 
-.back {
-    transform: rotateY(180deg)
+.hidecard {
+    visibility: hidden;
 }
 
 .back img {

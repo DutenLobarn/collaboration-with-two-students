@@ -7,7 +7,8 @@ import { fetchImages } from './api.js'
 
 
 // ***** ELEMENTS *****
-const gameboard = document.querySelector('.gameboard'); // Redundant?
+const pressToPlay = document.querySelector('.play h3');
+const gameboard = document.querySelector('.gameboard');
 const playerOneTotalScoreElement = document.querySelector('.pone-total-score');
 const playerTwoTotalScoreElement = document.querySelector('.ptwo-total-score');
 const playerOneCurrentScoreElement = document.querySelector('.score-player-one');
@@ -21,16 +22,6 @@ let playerTwoCurrentScore = 0; // Adding +1 once two of the same card is found. 
 let playerTwoTotalScore = 0; // Adding +1 once a game is won (if player2's turn).
 let firstPickedCard = null; // The first card selected by the user.
 let secondPickedCard = null; // The second card selected by the user.
-
-// TODO: Move to app.js!
-const pressToPlay = document.querySelector('.play h3'); // NINA: CHANGED IT TO TARGET THE H3 
-pressToPlay.addEventListener('click', function(event) {
-    // Hiding 'Press here to play!' to prevent several instances of the memory to run simultaneously.
-    pressToPlay.style.visibility = 'hidden';
-
-    // Calling function startgame
-    // startGame(); // NINA: CALLING IT IN APP.JS INSTEAD
-});
 
 // Populating the gameboard with Card-objects. One Card-object represents a memory card.
 export function startGame(theme, numOfCards) { // NINA: ADDED PARAMETER x2 FOR USERINPUTS
@@ -127,7 +118,8 @@ function compareCards(numOfCards) {
             case 1:
                 currentPlayer = 2;
                 break;
-            case 2: currentPlayer = 1;
+            case 2: 
+                currentPlayer = 1;
                 break;
         }
 
@@ -154,11 +146,11 @@ function updateCurrentScore (currentPlayer, numOfCards) { // NINA: ADDED numOfCa
     // Evaluates if the game is a draw
     if (playerOneCurrentScore === drawNum && playerTwoCurrentScore === drawNum) { // NINA: CHANGED 6 TO drawNum
         // Updating the DOM to let the players know the game ended in a draw.
-        let winnerText = `The game eneded in a draw!`;
+        let winnerText = `The game ended in a draw!`;
             endGame(winnerText);
     }
 
-    // Evaluates if on of the players won
+    // Evaluates if one of the players won
     if (playerOneCurrentScore >= winnerNum || playerTwoCurrentScore >= winnerNum) { // NINA: CHANGED 7 TO winnerNum
         updateTotalScore(currentPlayer);
     } 
@@ -167,22 +159,28 @@ function updateCurrentScore (currentPlayer, numOfCards) { // NINA: ADDED numOfCa
 // Updating the current score of the currentPlayer (Winner).
 function updateTotalScore (currentPlayer) {
     let winnerText = '';
+
+    // Selecting the players names
+    let playerOne = document.querySelector('.player-one')
+    let playerTwo = document.querySelector('.player-two')
     
     switch (currentPlayer) {
         case 1:
+            // Adding one to the score of the winner
             playerOneTotalScore += 1;
             playerOneTotalScoreElement.textContent = `Total Games Won: ${playerOneTotalScore}`;
 
-            // TODO: Update with dynamic name
-            winnerText = `Player One has won!`;
+            // Displaying the winner
+            winnerText = `${playerOne.textContent} has won!`;
             endGame(winnerText);
             break;
         case 2:
+            // Adding one to the score of the winner
             playerTwoTotalScore += 1;
             playerTwoTotalScoreElement.textContent = `Total Games Won: ${playerTwoTotalScore}`;
 
-            // TODO: Update with dynamic name
-            winnerText = `Player Two has won!`;
+            // Displaying the winner
+            winnerText = `${playerTwo.textContent} has won!`;
             endGame(winnerText);
             break;
     }
