@@ -14,7 +14,7 @@ let boxExample = document.querySelector('.box-example');
 
 let pressToPlay = document.querySelector('.play h3');
 // Making a click-event for the start text! Now user can write their "wishes", and we start the game! 
-pressToPlay.addEventListener('click', function (e) {
+pressToPlay.addEventListener('click', function () {
     displayNames();
     userInputs();
     errorHandling();
@@ -26,23 +26,24 @@ pressToPlay.addEventListener('click', function (e) {
 function displayNames() {
     let input = document.querySelectorAll('input')
 
-    if (input[0].value.length !== 0) {
+    // If the user doesn't write anything, or just types whitespace. It will by default show "Player num". 
+    if (input[0].value.trim().length !== 0) {
         playerOne.innerText = input[0].value;
-    } else {
+    } else { 
         playerOne.innerText = 'Player One'
     }
 
-    if (input[1].value.length !== 0) {
+    if (input[1].value.trim().length !== 0) {
         playerTwo.innerText = input[1].value;
     } else {
         playerTwo.innerText = 'Player Two'
     }
 
+    // showing it on the DOM
     playerOne.style.display = 'block';
     playerTwo.style.display = 'block';
 
-    playerTwo.style.display = 'block';
-
+    // hiding the inputs
     input[0].style.display = 'none'
     input[1].style.display = 'none'
 }
@@ -86,7 +87,7 @@ function userInputs(){
             // If its not a number
             if(isNaN(numOfCards)) {
                 boxText.innerText = "Only use numbers please!"
-            } // if its not an even number, or more than 40
+            } // if its not an even number, more than 40 or less than 8. 
             else if (numOfCards % 2 !== 0 || numOfCards > 40 || numOfCards < 8) { 
 
                 if(numOfCards > 40) {
